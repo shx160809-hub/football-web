@@ -1,0 +1,25 @@
+name: Sync Web
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Original
+        run: |
+          git clone -b gh-pages https://github.com/wlrwx/football-engine.git orig
+          mkdir public
+          cp -r orig/* public/
+          touch public/.nojekyll
+          echo "shx160809.top" > public/CNAME
+          LATEST=$(ls -1 public/20*.html | sort | tail -n 1)
+          if [ -n "$LATEST" ]; then cp "$LATEST" public/index.html; fi
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
