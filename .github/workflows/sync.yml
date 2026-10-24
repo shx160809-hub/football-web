@@ -1,7 +1,8 @@
 name: Sync Web
 on:
   schedule:
-    - cron: '23 * * * *'
+    # 每小时的第 8 分钟和第 38 分钟运行
+    - cron: '8,38 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
